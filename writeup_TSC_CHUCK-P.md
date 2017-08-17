@@ -19,7 +19,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/plot1.png "Dataset Class Visualization"
+[image1]: ./examples/plot1.png "Dataset Class Visualization Original"
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
@@ -27,6 +27,7 @@ The goals / steps of this project are the following:
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image9]: ./examples/plot2.png "Dataset Class Visualization Augmented"
 
 Thanks for reading it! Here is a link to my [project code](https://github.com/CHUCK-P/Traffic_Sign_Classifier/blob/master/Traffic_Sign_Classifier.ipynb)
 
@@ -81,12 +82,9 @@ Here is an example of an original image and an augmented image:
 
 The difference between the original data set and the augmented data set is the following ... 
 
+![alt text][image1]
 
-[image9]: ./examples/plot1.png "HISTOGRAM 1"
-
-
-[image10]: ./examples/plot2.png "HISTOGRAM 2"
-
+![alt text][image9]
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
