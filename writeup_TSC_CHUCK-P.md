@@ -82,10 +82,10 @@ Here is an example of an original image and an augmented image:
 The difference between the original data set and the augmented data set is the following ... 
 
 
-[image1]: ./examples/plot1.png "HISTOGRAM 1"
+[image9]: ./examples/plot1.png "HISTOGRAM 1"
 
 
-[image1]: ./examples/plot2.png "HISTOGRAM 2"
+[image10]: ./examples/plot2.png "HISTOGRAM 2"
 
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
