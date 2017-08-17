@@ -19,7 +19,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/plot1.png "Dataset Class Visualization"
+[image1]: ./examples/plot1.png "Dataset Class Visualization Original"
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
@@ -27,20 +27,11 @@ The goals / steps of this project are the following:
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image9]: ./examples/plot2.png "Dataset Class Visualization Augmented"
 
-## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
-
----
-###Writeup / README
-
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/CHUCK-P/Traffic_Sign_Classifier/blob/master/Traffic_Sign_Classifier.ipynb)
+Thanks for reading it! Here is a link to my [project code](https://github.com/CHUCK-P/Traffic_Sign_Classifier/blob/master/Traffic_Sign_Classifier.ipynb)
 
 ###Data Set Summary & Exploration
-
-####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
 I used the pandas library to calculate summary statistics of the traffic
 signs data set:
@@ -61,17 +52,29 @@ Here is an exploratory visualization of the data set. It is a bar chart showing 
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I decided to convert the images to grayscale because ...
+###Preprocessing Steps
+
+I created a pipeline to be reused on every image that was for training, validation, testing, and supplementary testing.  A summary of the steps that I used are as follows:
+1) Convert to grayscale
+2) Normalize the image between -1.0 to 1.0
+3) Crop the image
+4) Sharpen the image
+
+As a first step, I decided to convert the images to grayscale because lighting conditions may affect the different channels in RGB, adversely.  I don't have any experimentation to support that assumption, though.  Just through experience on other projects.
 
 Here is an example of a traffic sign image before and after grayscaling.
 
 ![alt text][image2]
 
-As a last step, I normalized the image data because ...
+Next, I normalized the image data to between -1.0 and 1.0 to ensure that the data was properly conditioned for gradient descent
 
-I decided to generate additional data because ... 
+Then, I cropped the image to eliminate unnecessary features that might cause confuse the model
 
-To add more data to the the data set, I used the following techniques because ... 
+Finally, I sharpened the image using a Gaussian blur overlayed with the original image in order to reduce noise that are not relevant features
+
+After visualizing the dataset via the histogram plot, I decided to generate additional data because a siginificant number of the traffic sign classes had less than 1200 samples available.
+
+To add more data to the the data set, I sought out classes with less than 1200 samples and then used a rotation transform.  The additional data was simply appended to the original data set.
 
 Here is an example of an original image and an augmented image:
 
@@ -79,6 +82,9 @@ Here is an example of an original image and an augmented image:
 
 The difference between the original data set and the augmented data set is the following ... 
 
+![alt text][image1]
+
+![alt text][image9]
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
@@ -137,16 +143,18 @@ The first image might be difficult to classify because ...
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| ClassID  |      Image      |     Prediction	   	| 
+|:--------:|:---------------:|:------------------:| 
+|     1    |      30kpm      |   					30kpm   				| 
+|     4    |      70kpm     	|        20kpm							|
+|    11    |  RoW Next Inter	|  RoW Next Inter				|
+|    25    |    Road Work	  	|     Road Work						|
+|    33    | Turn Right Ahead| Turn Right Ahead 		|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+Originally, the model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares poorly to the accuracy on the test set of 93%.  I believed that I was cropping the original image too closely to the edges, so I resubmitted the same image at 32x32 with slightly larger borders.
+
+Even after re-cropping the image that was failing (70kpm), my accuracy stayed at 80%.  This time, the reported probability was almost 97% that the 70kpm (classID 4) was 20kpm (classID 0). One possibility may be that there was not enough quality training data to classify the 70kpm versus 20kpm - since they are very similar.  Both the 20kpm and 70kpm had under 1200 original samples submitted.  Additional samples were generated by applying small rotation transforms to these originals, so perhaps that was not sufficient.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
