@@ -153,13 +153,13 @@ This time, the reported probability was almost 37% that the 70kpm (classID 4) wa
  							
 
 ![alt text][image5] 
-| Probability         	|     Prediction	        					
+| Probability         	|     Prediction	        	|				
 |:--------------------:|:---------------------------------------------:| 
 | .375        			      | 20kpm   									|
 | .347    		           | 30kpm 										|
 | .098				             | 70kpm											|
 | .089      			        | Bicycles crossing					 				|
-| .033			              | 80kpm|
+| .033			              | 80kpm          |
 
 ![alt text][image6] 
 | Probability         	|     Prediction	        					|
