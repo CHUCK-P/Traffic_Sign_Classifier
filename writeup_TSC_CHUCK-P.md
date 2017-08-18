@@ -91,17 +91,17 @@ My final model consisted of the following layers:
 |:---------------:|:---------------------------------------------:| 
 | Input         		| 32x32x1 Grayscale image   					             		| 
 | Convolution 5x5 | 1x1 stride, same padding, outputs 28x28x6    	|
-| RELU					       |												
+| RELU					       |												|
 | Dropout 1       | Used for training ONLY                        |
 | Pooling         | Output 14x14x6                                |
 | Convolution 5x5 |	1x1 stride,  outputs 10x10x16             				|
-| RELU            |
+| RELU            |            |
 | Dropout 2       | Used for trianing ONLY                        |
 | Pooling         | Output 5x5x16                                 |
 | Flatten         | Output 400                                    |
 | Fully connected	| Output 120                           									|
 | Fully connected	| Output 84                            									|
-| RELU            |
+| RELU            |    |
 | Fully connected	| Output 43                            									|
 
 
@@ -119,25 +119,11 @@ My final model results were:
 * validation set accuracy of 94.7% 
 * test set accuracy of 93.2%
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
-
 ### Test a Model on New Images
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image4] ![alt text][image5] ![alt text][image6] ![alt text][image7] ![alt text][image8]
 
 
 Here are the results of the prediction:
@@ -160,41 +146,41 @@ All of the different new samples except for the 70kpm (ClassID 4) reported a pre
 This time, the reported probability was almost 37% that the 70kpm (classID 4) was 20kpm (classID 0). The second highest probability was for 30kpm (34%) and then 70kpm (9%).
 
 ![alt text][image4]
-| Probability         	|     Prediction	        					
+| Probability         	|     Prediction	        					                  |
 |:--------------------:|:---------------------------------------------:| 
-| .997        			      | 30kpm   									
-| .001     		          | 80kpm 										
+| .997        			      | 30kpm   									|
+| .001     		          | 80kpm 										|
  							
 
 ![alt text][image5] 
 | Probability         	|     Prediction	        					
 |:--------------------:|:---------------------------------------------:| 
-| .375        			      | 20kpm   									
-| .347    		           | 30kpm 										
-| .098				             | 70kpm											
-| .089      			        | Bicycles crossing					 				
-| .033			              | 80kpm
+| .375        			      | 20kpm   									|
+| .347    		           | 30kpm 										|
+| .098				             | 70kpm											|
+| .089      			        | Bicycles crossing					 				|
+| .033			              | 80kpm|
 
 ![alt text][image6] 
-| Probability         	|     Prediction	        					
+| Probability         	|     Prediction	        					|
 |:--------------------:|:---------------------------------------------:| 
-| .999         			     | Right of Way Next Intersection   									
-| .001     		          | Beware of Ice/Snow 										
+| .999         			     | Right of Way Next Intersection   						|			
+| .001     		          | Beware of Ice/Snow 										|
 
 ![alt text][image7]
-| Probability         	|     Prediction	        					
+| Probability         	|     Prediction	        					|
 |:--------------------:|:---------------------------------------------:| 
-| 1.000         			    | Road Work   									
+| 1.000         			    | Road Work   									|
 
 
 ![alt text][image8]
-| Probability         	|     Prediction	        					
+| Probability         	|     Prediction	        					|
 |:--------------------:|:---------------------------------------------:| 
-| .969         			     | Turn Right Ahead   									
-| .014     		          | Ahead Only 										
-| .003					            | Right of Way at Next Intersection										
-| .003	      		        | Traffic Signals			 				
-| .002				             | 80kpm 
+| .969         			     | Turn Right Ahead   									|
+| .014     		          | Ahead Only 										|
+| .003					            | Right of Way at Next Intersection						|				
+| .003	      		        | Traffic Signals			 				|
+| .002				             | 80kpm |
 
 
 
