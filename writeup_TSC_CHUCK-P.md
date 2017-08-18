@@ -1,11 +1,5 @@
 #**Traffic Sign Recognition** 
 
-##Writeup Template
-
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Build a Traffic Sign Recognition Project**
 
 The goals / steps of this project are the following:
@@ -22,12 +16,14 @@ The goals / steps of this project are the following:
 [image1]: ./examples/plot1.png "Dataset Class Visualization Original"
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image4]: ./examples/test_01_32x32_speed_limit_30kpm.png "Speed Limit 30kpm"
+[image5]: ./examples/test_04_32x32_speed_limit_70kpm.png "Speed Limit 70kpm"
+[image6]: ./examples/test_11_32x32_row_next_intersection.png "Right of Way Next Intersection"
+[image7]: ./examples/test_25_32x32_road_work.png "Road Work"
+[image8]: ./examples/test_33_32x32_turn_right_ahead.png "Turn Right Ahead"
 [image9]: ./examples/plot2.png "Dataset Class Visualization Augmented"
+[image10]: ./examples/plot3.png "Training Loss and Validation Loss"
+[image11]: ./examples/lenet.png "LeNet Model"
 
 Thanks for reading it! Here is a link to my [project code](https://github.com/CHUCK-P/Traffic_Sign_Classifier/blob/master/Traffic_Sign_Classifier.ipynb)
 
@@ -49,8 +45,6 @@ Here is an exploratory visualization of the data set. It is a bar chart showing 
 ![alt text][image1]
 
 ###Design and Test a Model Architecture
-
-####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
 ###Preprocessing Steps
 
@@ -86,60 +80,51 @@ The difference between the original data set and the augmented data set is the f
 
 ![alt text][image9]
 
-####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+####2. MODEL ARCHITECTURE
+My model architecture is heavily based upon the LeNet example presented for the MNIST example.  The only small modifications that I made were to add dropout after the first and second RELU activations.
+
+![alt text][image11]
 
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+| Layer         		|     Description	        			                 		| 
+|:---------------:|:---------------------------------------------:| 
+| Input         		| 32x32x1 Grayscale image   					             		| 
+| Convolution 5x5 | 1x1 stride, same padding, outputs 28x28x6    	|
+| RELU					       |												|
+| Dropout 1       | Used for training ONLY                        |
+| Pooling         | Output 14x14x6                                |
+| Convolution 5x5 |	1x1 stride,  outputs 10x10x16             				|
+| RELU            |            |
+| Dropout 2       | Used for trianing ONLY                        |
+| Pooling         | Output 5x5x16                                 |
+| Flatten         | Output 400                                    |
+| Fully connected	| Output 120                           									|
+| Fully connected	| Output 84                            									|
+| RELU            |    |
+| Fully connected	| Output 43                            									|
 
 
-####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+####3. MODEL TRAINING 
+Using the AdamOptimizer available in TensorFlow, I stuck with a generic batch size of 128 and really didn't experiment with larger batches nor did I deviate from the default learning rate.  Prior to adding more training data via the rotations -20, -15, -10, 10, 15, 20, I did experiment with the learning rate and batch size - to no avail.
 
-To train the model, I used an ....
+To check for overfitting, I monitored the loss of both the training and validation sets.  The convergence seemed relatively stable.
+![alt text][image10]
 
-####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+####4. SOLUTION
+In order to get to a solution with a validation set accuracy of at least 0.93, I added a six-fold amount of data to the classes that had less that 1200 samples. Regardless of the number of samples, a passing accuaracy would not be possible if the data were not normalized between -1 and 1 and also preprocessed using the pipeline. Most of the techniques that I used were well know implementations.  The only change to the LeNet architecture that I made was to add dropouts after the first and second RELU activation functions. 
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 99%
+* validation set accuracy of 94.7% 
+* test set accuracy of 93.2%
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
-
-###Test a Model on New Images
-
-####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+### Test a Model on New Images
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image4] ![alt text][image5] ![alt text][image6] ![alt text][image7] ![alt text][image8]
 
-The first image might be difficult to classify because ...
-
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
@@ -154,27 +139,50 @@ Here are the results of the prediction:
 
 Originally, the model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares poorly to the accuracy on the test set of 93%.  I believed that I was cropping the original image too closely to the edges, so I resubmitted the same image at 32x32 with slightly larger borders.
 
-Even after re-cropping the image that was failing (70kpm), my accuracy stayed at 80%.  This time, the reported probability was almost 97% that the 70kpm (classID 4) was 20kpm (classID 0). One possibility may be that there was not enough quality training data to classify the 70kpm versus 20kpm - since they are very similar.  Both the 20kpm and 70kpm had under 1200 original samples submitted.  Additional samples were generated by applying small rotation transforms to these originals, so perhaps that was not sufficient.
+Even after re-cropping the image that was failing (70kpm), my accuracy stayed at 80%.  One possibility may be that there was not enough quality training data to classify the 70kpm versus 20kpm - since they are very similar.  Both the 20kpm and 70kpm had under 1200 original samples submitted.  Additional samples were generated by applying small rotation transforms to these originals, so perhaps that was not sufficient.  More importantly, the 0 only had about 200 samples to begin with and the 4 had just over 1200 (the limit for adding samples).  So both ended up with a low amount of final samples.
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+### SOFTMAX PREDICTIONS
+All of the different new samples except for the 70kpm (ClassID 4) reported a prediction probability of over 96% (of those, all were 99% except for the "Turn Right Ahead" ClassID 33). 
+This time, the reported probability was almost 37% that the 70kpm (classID 4) was 20kpm (classID 0). The second highest probability was for 30kpm (34%) and then 70kpm (9%).
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+![alt text][image4]
+| Probability         	|     Prediction	        					                  |
+|:--------------------:|:---------------------------------------------:| 
+| .997        			      | 30kpm   									|
+| .001     		          | 80kpm 										|
+ 							
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+![alt text][image5] 
+| Probability         	|     Prediction	        	|				
+|:--------------------:|:---------------------------------------------:| 
+| .375        			      | 20kpm   									|
+| .347    		           | 30kpm 										|
+| .098				             | 70kpm											|
+| .089      			        | Bicycles crossing					 				|
+| .033			              | 80kpm          |
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+![alt text][image6] 
+| Probability         	|     Prediction	        					|
+|:--------------------:|:---------------------------------------------:| 
+| .999         			     | Right of Way Next Intersection   						|			
+| .001     		          | Beware of Ice/Snow 										|
+
+![alt text][image7]
+| Probability         	|     Prediction	        					|
+|:--------------------:|:---------------------------------------------:| 
+| 1.000         			    | Road Work   									|
 
 
-For the second image ... 
+![alt text][image8]
+| Probability         	|     Prediction	        					|
+|:--------------------:|:---------------------------------------------:| 
+| .969         			     | Turn Right Ahead   									|
+| .014     		          | Ahead Only 										|
+| .003					            | Right of Way at Next Intersection						|				
+| .003	      		        | Traffic Signals			 				|
+| .002				             | 80kpm |
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+
 
 
 
