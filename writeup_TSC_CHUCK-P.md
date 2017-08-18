@@ -147,16 +147,16 @@ This time, the reported probability was almost 37% that the 70kpm (classID 4) wa
 
 ![alt text][image4]
 
-| Probability         	|     Prediction	        					                  |
-|:--------------------:|:---------------------------------------------:| 
+| Probability         	|     Prediction	        		     |
+|:--------------------:|:-----------------------------:| 
 | .997        			      | 30kpm   									|
 | .001     		          | 80kpm 										|
  							
 
 ![alt text][image5] 
 
-| Probability         	|     Prediction	        	|				
-|:--------------------:|:---------------------------------------------:| 
+| Probability         	|     Prediction	             	|				
+|:--------------------:|:----------------------------:| 
 | .375        			      | 20kpm   									|
 | .347    		           | 30kpm 										|
 | .098				             | 70kpm											|
@@ -165,22 +165,22 @@ This time, the reported probability was almost 37% that the 70kpm (classID 4) wa
 
 ![alt text][image6] 
 
-| Probability         	|     Prediction	        					|
-|:--------------------:|:---------------------------------------------:| 
+| Probability         	|     Prediction	        			 		|
+|:--------------------:|:----------------------------:| 
 | .999         			     | Right of Way Next Intersection   						|			
 | .001     		          | Beware of Ice/Snow 										|
 
 ![alt text][image7]
 
-| Probability         	|     Prediction	        					|
-|:--------------------:|:---------------------------------------------:| 
+| Probability         	|     Prediction	        			 		|
+|:--------------------:|:----------------------------:| 
 | 1.000         			    | Road Work   									|
 
 
 ![alt text][image8]
 
-| Probability         	|     Prediction	        					|
-|:--------------------:|:---------------------------------------------:| 
+| Probability         	|     Prediction	        				 	|
+|:--------------------:|:----------------------------:| 
 | .969         			     | Turn Right Ahead   									|
 | .014     		          | Ahead Only 										|
 | .003					            | Right of Way at Next Intersection						|				
