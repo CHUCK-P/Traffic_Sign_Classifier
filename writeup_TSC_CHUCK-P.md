@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/plot1.png "Dataset Class Visualization Original"
+[image1]: ./examples/plot1.png "Training Dataset Class Visualization Original"
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
 [image4]: ./examples/test_01_32x32_speed_limit_30kpm.png "Speed Limit 30kpm"
@@ -24,6 +24,7 @@ The goals / steps of this project are the following:
 [image9]: ./examples/plot2.png "Dataset Class Visualization Augmented"
 [image10]: ./examples/plot3.png "Training Loss and Validation Loss"
 [image11]: ./examples/lenet.png "LeNet Model"
+[image12]: ./examples/plot4.png "Testing Dataset Class Visualization Original"
 
 Thanks for reading it! Here is a link to my [project code](https://github.com/CHUCK-P/Traffic_Sign_Classifier/blob/master/Traffic_Sign_Classifier.ipynb)
 
@@ -40,19 +41,27 @@ signs data set:
 
 ####2. Include an exploratory visualization of the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing the distribution of number of samples per unique class
+Here is an exploratory visualization of the training data set. It is a bar chart showing the distribution of number of samples per unique class
 
 ![alt text][image1]
+
+Here is a similar exploratory visualization of the testing data set.
+
+![alt text][image12]
+
+NOTE:
+The testing data has very similar deficiencies as the training data.  This might make it harder to have statistically significant results when the verification step is so lightly populated.
+
 
 ###Design and Test a Model Architecture
 
 ###Preprocessing Steps
 
 I created a pipeline to be reused on every image that was for training, validation, testing, and supplementary testing.  A summary of the steps that I used are as follows:
-1) Convert to grayscale
-2) Normalize the image between -1.0 to 1.0
-3) Crop the image
-4) Sharpen the image
+    # 1. Converted input RGB image to grayscale in order to reduce the affects of lighting conditions
+    # 2. Normalize image range -1.0 to 1.0 to properly condition the data for Gradient Descent Method
+    # 3. Crop image to remove unnecessary pixels to avoid confusing the training model
+    # 4. Sharpen the cropped image in order to create more distinct features
 
 As a first step, I decided to convert the images to grayscale because lighting conditions may affect the different channels in RGB, adversely.  I don't have any experimentation to support that assumption, though.  Just through experience on other projects.
 
@@ -60,7 +69,7 @@ Here is an example of a traffic sign image before and after grayscaling.
 
 ![alt text][image2]
 
-Next, I normalized the image data to between -1.0 and 1.0 to ensure that the data was properly conditioned for gradient descent
+Next, I normalized the image data to between -1.0 and 1.0 to ensure that the data was properly conditioned for gradient descent.  I used  pixel = (pixel - 127.5) / 127.5 instead of 128.0.
 
 Then, I cropped the image to eliminate unnecessary features that might cause confuse the model
 
@@ -87,22 +96,22 @@ My model architecture is heavily based upon the LeNet example presented for the 
 
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        			                 		| 
-|:---------------:|:---------------------------------------------:| 
-| Input         		| 32x32x1 Grayscale image   					             		| 
-| Convolution 5x5 | 1x1 stride, same padding, outputs 28x28x6    	|
-| RELU					       |												|
-| Dropout 1       | Used for training ONLY                        |
-| Pooling         | Output 14x14x6                                |
-| Convolution 5x5 |	1x1 stride,  outputs 10x10x16             				|
-| RELU            |            |
-| Dropout 2       | Used for trianing ONLY                        |
-| Pooling         | Output 5x5x16                                 |
-| Flatten         | Output 400                                    |
-| Fully connected	| Output 120                           									|
-| Fully connected	| Output 84                            									|
-| RELU            |    |
-| Fully connected	| Output 43                            									|
+| Layer         		|     Description	        			                                		| 
+|:---------------:|:------------------------------------------------------------:| 
+| Input         		| 32x32x1 Grayscale image   					                            		| 
+| Convolution 5x5 | 5x5x1 filter,  stride 1x1, VALID padding, Output 28x28x6    	|
+| RELU					       |											                                                  	|
+| Dropout 1       | Used for training ONLY                                       |
+| Pooling         | 2x2 kernel, 2x2 stride, VALID padding, Output 14x14x6        |
+| Convolution 5x5 |	5x5x6 filter, 1x1 stride, VALID padding, Output 10x10x16 				|
+| RELU            |                                                              |
+| Dropout 2       | Used for trianing ONLY                                       |
+| Pooling         | 2x2 kernel, 2x2 stride, Output 5x5x16                        |
+| Flatten         | Output 400                                                   |
+| Fully connected	| Output 120                           		               							|
+| Fully connected	| Output 84                            		               							|
+| RELU            |                                                              |
+| Fully connected	| Output 43                                                    |
 
 
 ####3. MODEL TRAINING 
@@ -119,12 +128,24 @@ My final model results were:
 * validation set accuracy of 94.7% 
 * test set accuracy of 93.2%
 
+Q1: What was the first architecture that was tried and why was it chosen?
+A1: I tried the vanilla version of the LeNet model except changed the first convolution to have a three (3) channel input filter, originally.  This may have been fine, but during my experimentation, I simply changed to grayscale (one (1) channel) and continued prototyping along that branch.
+Q2: What were some problems with the initial architecture?
+A2: I saw almost immediately that it was overfitting.  The loss curves between the training and the validation curves were diverging.
+Q3: How was the architecture adjusted and why was it adjusted?
+A3: Initially, I started by changing the filter to single channel.  Then I added in dropout after the first and second convolutions.  This did not work - so then I tried later on after the fully conencted convolutions. That didn't work. I then tried again after convolution 1 and 2, but after the RELU.  This seemed to work better. 
+Q4: Which parameters were tuned? How were they adjusted and why?
+A4: I tried adjusting the learning rate and the batch size.  Neither seemed to help.  I then tried a large number of epochs to no avail.  I ended up with all the same parameters values that were the default.  The big mistake that I was making was setting the test and validation Evaluate function to have a keep_prob of .5.  This eliminated some confusing results.
+Q5: What are some of the important design choices and why were they chosen?
+A5: Dropout seemed to be the most relevant.  It quickly addressed the overfitting problem.  Changing from 3 channels to 1 channel (grayscale), may have been important, but I haven't proven that.
+
 ### Test a Model on New Images
 
 Here are five German traffic signs that I found on the web:
 
 ![alt text][image4] ![alt text][image5] ![alt text][image6] ![alt text][image7] ![alt text][image8]
 
+DISCUSSION: These images exhibit varying brightness and contrast.  Their backgrounds might not be as complicated as, say, a city scene - but they are not clear, either.  The additional five traffic signs are also varied in angle.  Most significantly, the 70kph sign is angled clockwise, slightly.  This was the sign that was most difficult to classify.
 
 Here are the results of the prediction:
 
@@ -149,7 +170,7 @@ This time, the reported probability was almost 37% that the 70kpm (classID 4) wa
 
 | Probability         	|     Prediction	        		     |
 |:--------------------:|:-----------------------------:| 
-| .997        			      | 30kpm   									|
+| .998        			      | 30kpm   									|
 | .001     		          | 80kpm 										|
  							
 
@@ -157,18 +178,18 @@ This time, the reported probability was almost 37% that the 70kpm (classID 4) wa
 
 | Probability         	|     Prediction	             	|				
 |:--------------------:|:----------------------------:| 
-| .375        			      | 20kpm   									|
-| .347    		           | 30kpm 										|
-| .098				             | 70kpm											|
-| .089      			        | Bicycles crossing					 				|
-| .033			              | 80kpm          |
+| .532        			      | 70kpm   									|
+| .338    		           | 20kpm 										|
+| .103				             | General Caution											|
+| .011      			        | Slippery Road					 				|
+| .007			              | Children Crossing          |
 
 ![alt text][image6] 
 
 | Probability         	|     Prediction	        			 		|
 |:--------------------:|:----------------------------:| 
-| .999         			     | Right of Way Next Intersection   						|			
-| .001     		          | Beware of Ice/Snow 										|
+| .997         			     | Right of Way Next Intersection   						|			
+| .003     		          | Beware of Ice/Snow 										|
 
 ![alt text][image7]
 
@@ -181,11 +202,11 @@ This time, the reported probability was almost 37% that the 70kpm (classID 4) wa
 
 | Probability         	|     Prediction	        				 	|
 |:--------------------:|:----------------------------:| 
-| .969         			     | Turn Right Ahead   									|
-| .014     		          | Ahead Only 										|
-| .003					            | Right of Way at Next Intersection						|				
-| .003	      		        | Traffic Signals			 				|
-| .002				             | 80kpm |
+| .952         			     | Turn Right Ahead   									|
+| .017     		          | Traffic Signals 										|
+| .006					            | Stop						|				
+| .005	      		        | Priority Road		 				|
+| .005				             | 100kpm |
 
 
 
